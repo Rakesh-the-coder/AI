@@ -1,0 +1,69 @@
+from itertools import permutations
+
+
+def travelling_salesman(graph, start):
+
+    cities = list(range(len(graph)))
+
+    cities.remove(start)
+
+    minimum_cost = float("inf")
+    best_path = None
+
+    for permutation in permutations(cities):
+
+        current_cost = 0
+        current_path = [start]
+
+        current_city = start
+
+        for city in permutation:
+
+            current_cost += graph[current_city][city]
+
+            current_path.append(city)
+
+            current_city = city
+
+        # Return to starting city
+        current_cost += graph[current_city][start]
+
+        current_path.append(start)
+
+        if current_cost < minimum_cost:
+
+            minimum_cost = current_cost
+            best_path = current_path
+
+    return best_path, minimum_cost
+
+
+print("===== TRAVELLING SALESMAN PROBLEM =====")
+
+n = int(input("Enter number of cities: "))
+
+print("Enter the cost matrix:")
+
+graph = []
+
+for i in range(n):
+
+    row = list(map(int, input().split()))
+
+    graph.append(row)
+
+
+start = int(
+    input(
+        f"Enter starting city (0 to {n - 1}): "
+    )
+)
+
+path, cost = travelling_salesman(
+    graph,
+    start
+)
+
+print("\nOptimal path:", " -> ".join(map(str, path)))
+
+print("Minimum cost:", cost)
